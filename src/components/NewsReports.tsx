@@ -1,11 +1,22 @@
 import { useState } from 'react';
-import { FileText, AlertTriangle, Users, Shield } from 'lucide-react';
+import { FileText, AlertTriangle, Users, Shield, ExternalLink } from 'lucide-react';
 
 interface NewsReportsProps {
   language: 'en' | 'zh';
 }
 
-type Category = 'all' | 'official' | 'independent' | 'crackdown';
+type Category = 'all' | 'official' | 'independent' | 'crackdown' | 'censorship';
+
+interface Report {
+  category: Category;
+  date: string;
+  titleEn: string;
+  titleZh: string;
+  contentEn: string;
+  contentZh: string;
+  source: string;
+  url?: string;
+}
 
 export function NewsReports({ language }: NewsReportsProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
@@ -18,7 +29,8 @@ export function NewsReports({ language }: NewsReportsProps) {
         all: 'All Reports',
         official: 'Official Statements',
         independent: 'Independent Reporting',
-        crackdown: 'The Crackdown'
+        crackdown: 'The Crackdown',
+        censorship: 'Censorship'
       }
     },
     zh: {
@@ -28,110 +40,80 @@ export function NewsReports({ language }: NewsReportsProps) {
         all: '所有報導',
         official: '官方聲明',
         independent: '獨立報導',
-        crackdown: '清算與拘捕'
+        crackdown: '清算與拘捕',
+        censorship: '審查'
       }
     }
   };
 
-  const reports = [
+  const reports: Report[] = [
     {
-      category: 'official' as Category,
-      date: 'Nov 27, 2025',
-      titleEn: 'Government Press Conference: "Rumors Will Not Be Tolerated"',
-      titleZh: '政府記者會：「不容造謠」',
-      contentEn: 'Government spokesman warns public against spreading "unverified information" about the fire. Claims that fire safety procedures were followed and investigations are ongoing. No mention of fire alarm failures.',
-      contentZh: '政府發言人警告公眾不要散播「未經證實資訊」。聲稱消防安全程序已遵守，調查正在進行。對火警鐘失靈隻字不提。',
-      source: 'Government Information Services'
+      category: 'independent',
+      date: 'Nov 26, 2025',
+      titleEn: 'Tai Po Fire: Over 150 Dead in Hong Kong\'s Deadliest Blaze in Decades',
+      titleZh: '大埔大火：香港數十年來最致命火災，超過150人死亡',
+      contentEn: 'A devastating fire at Wang Fuk Court public housing estate in Tai Po has claimed over 150 lives, making it Hong Kong\'s deadliest fire in decades. The blaze, which broke out during renovation works, spread rapidly due to flammable construction materials. Survivors report that fire alarms failed to activate, trapping residents inside.',
+      contentZh: '大埔宏福苑公共屋邨發生毀滅性火災，奪去超過150條生命，成為香港數十年來最致命的火災。火災在裝修工程期間爆發，因易燃建材而迅速蔓延。生還者報告火警鐘未能啟動，居民被困其中。',
+      source: 'BBC News',
+      url: 'https://www.bbc.com/news/articles/cd6x2ppjv4go'
     },
     {
-      category: 'independent' as Category,
-      date: 'Nov 27, 2025',
-      titleEn: 'Survivors Testimony: "The Alarms Never Rang"',
-      titleZh: '生還者證詞：「警鐘從未響起」',
-      contentEn: 'Multiple survivors confirm that fire alarms did not activate during the blaze. "We only knew about the fire when we smelled smoke and saw flames outside our windows," said one resident. Many escaped using stairwells filled with toxic smoke.',
-      contentZh: '多名生還者確認火警鐘在火災期間並未啟動。「我們只是聞到煙味、看到窗外有火光才知道起火。」一名居民表示。許多人在充滿有毒煙霧的樓梯逃生。',
-      source: 'Citizen Journalist Archive'
-    },
-    {
-      category: 'independent' as Category,
-      date: 'Nov 28, 2025',
-      titleEn: 'Investigation Reveals: Renovation Company Used Banned Materials',
-      titleZh: '調查揭露：裝修公司使用違禁物料',
-      contentEn: 'Independent investigation finds that the renovation contractor used highly flammable materials banned under fire safety codes. Styrofoam boards and plastic netting accelerated the fire. Questions raised about why building inspections failed to catch violations.',
-      contentZh: '獨立調查發現裝修承辦商使用消防安全規例禁用的高度易燃物料。發泡膠板及塑膠圍網加速火勢蔓延。引發為何大廈檢查未能發現違規的質疑。',
-      source: 'Investigative Journalists Collective'
-    },
-    {
-      category: 'crackdown' as Category,
+      category: 'crackdown',
       date: 'Nov 29, 2025',
-      titleEn: 'Student Arrested for Petition Demanding Independent Inquiry',
-      titleZh: '學生因發起聯署要求獨立調查被捕',
-      contentEn: 'Miles Kwan, a university student, was arrested at his campus dormitory on charges of sedition. His online petition calling for "Four Big Demands" including independent inquiry, government accountability, fire safety reforms, and no retaliation against victims\' families had garnered over 50,000 signatures.',
-      contentZh: 'Miles Kwan，一名大學生，在校園宿舍被以煽動罪拘捕。他在網上發起的「四大訴求」聯署要求獨立調查、政府問責、消防安全改革及不秋後算賬，已獲超過50,000個簽名。',
-      source: 'Legal Aid Organizations'
+      titleEn: 'University Student Miles Kwan Arrested for Launching "Four Big Demands" Petition',
+      titleZh: '大學生 Miles Kwan 因發起「四大訴求」聯署被捕',
+      contentEn: 'University student Miles Kwan was arrested on charges of sedition after launching a Change.org petition calling for "Four Big Demands": independent inquiry into the fire, government accountability, fire safety reforms, and protection for victims\' families. The petition garnered over 50,000 signatures before authorities forced it offline. His arrest marks the beginning of a broader crackdown on those seeking answers.',
+      contentZh: '大學生 Miles Kwan 因在 Change.org 發起「四大訴求」聯署被以煽動罪拘捕。聯署要求對火災進行獨立調查、政府問責、消防安全改革及保護遇難者家屬。聯署在當局強制下線前獲得超過50,000個簽名。他的被捕標誌著對尋求真相者的更廣泛打壓開始。',
+      source: 'Change.org Petition / Hong Kong Free Press',
+      url: 'https://www.change.org/p/%E8%A6%81%E6%B1%82%E7%8D%A8%E7%AB%8B%E8%AA%BF%E6%9F%A5%E5%A4%A7%E5%9F%94%E5%AE%8F%E7%A6%8F%E8%8B%91%E7%81%AB%E7%81%BD-demand-independence-investigation-of-tai-po-wang-fuk-court-fire'
     },
     {
-      category: 'official' as Category,
-      date: 'Nov 30, 2025',
-      titleEn: 'Police: "Seditious Content Will Be Prosecuted"',
-      titleZh: '警方：「煽動內容必被檢控」',
-      contentEn: 'Police issue statement warning that social media posts criticizing government response or calling for protests will be treated as sedition. Several popular discussion forums shut down their fire-related threads.',
-      contentZh: '警方發表聲明警告，批評政府回應或號召抗議的社交媒體帖文將被視為煽動。多個熱門討論區關閉相關火災討論串。',
-      source: 'Hong Kong Police Force'
-    },
-    {
-      category: 'crackdown' as Category,
-      date: 'Dec 1, 2025',
-      titleEn: 'Volunteers Arrested at Memorial Vigil',
-      titleZh: '義工在悼念活動被捕',
-      contentEn: 'At least 8 volunteers who organized a candlelight memorial at Tai Po were arrested for "unauthorized assembly." They were distributing white flowers and information leaflets about fire safety to passersby.',
-      contentZh: '至少8名在大埔組織燭光悼念的義工因「未經批准集結」被捕。他們向路人派發白花及消防安全資訊傳單。',
-      source: 'Human Rights Watch HK'
-    },
-    {
-      category: 'crackdown' as Category,
-      date: 'Dec 2, 2025',
-      titleEn: 'Netizens Face Sedition Charges for Social Media Posts',
-      titleZh: '網民因社交媒體發文面臨煽動罪指控',
-      contentEn: 'Police arrest at least 6 individuals for Facebook and Instagram posts criticizing fire safety oversight and demanding resignations of responsible officials. Posts included factual reports of alarm failures and photos from the fire scene.',
-      contentZh: '警方拘捕至少6人，指其在Facebook和Instagram批評消防安全監管及要求負責官員問責。帖文包括火警鐘失靈的事實報導及火災現場照片。',
-      source: 'Digital Rights Observer'
-    },
-    {
-      category: 'independent' as Category,
+      category: 'independent',
       date: 'Dec 3, 2025',
-      titleEn: 'Families of Victims Speak Out: "We Want Truth, Not Silence"',
-      titleZh: '遇難者家屬發聲：「我們要真相，不要沉默」',
-      contentEn: 'In rare interviews conducted anonymously, families of victims express frustration with government stonewalling. "They want us to accept compensation and stay quiet. But we lost our loved ones because someone failed to do their job. We deserve answers."',
-      contentZh: '在匿名進行的罕見訪問中，遇難者家屬表達對政府阻撓的不滿。「他們要我們收下賠償然後閉嘴。但我們失去親人是因為有人失職。我們應得到答案。」',
-      source: 'Anonymous Testimony Archive'
+      titleEn: 'Hong Kong\'s Grenfell Tower Moment: When Grief Became Sedition',
+      titleZh: '香港的格倫費爾塔時刻：當悲傷成為煽動',
+      contentEn: 'The Diplomat examines how Hong Kong\'s response to the Tai Po fire mirrors the UK\'s Grenfell Tower disaster, but with a critical difference: those demanding accountability face arrest. The article documents how students, activists, and ordinary citizens expressing grief or seeking answers have been detained under national security laws, transforming a tragedy into a crackdown.',
+      contentZh: '《外交家》雜誌探討香港對大埔火災的回應如何與英國格倫費爾塔災難相似，但有一個關鍵差異：要求問責者面臨拘捕。文章記錄了學生、活動人士和普通市民如何因表達悲傷或尋求答案而被以國安法拘留，將一場悲劇轉化為打壓。',
+      source: 'The Diplomat',
+      url: 'https://thediplomat.com/2025/12/hong-kongs-grenfell-tower-moment-when-grief-became-sedition/'
     },
     {
-      category: 'official' as Category,
-      date: 'Dec 3, 2025',
-      titleEn: 'Government Announces Internal Review, Rejects Independent Inquiry',
-      titleZh: '政府宣布內部檢討，拒絕獨立調查',
-      contentEn: 'Chief Executive announces that an internal government committee will review fire safety regulations. Dismisses calls for independent inquiry as "politically motivated" and "undermining public order."',
-      contentZh: '行政長官宣布政府內部委員會將檢討消防安全規例。將獨立調查要求斥為「政治動機」及「破壞公共秩序」。',
-      source: 'Government Information Services'
+      category: 'censorship',
+      date: 'Dec 2-3, 2025',
+      titleEn: 'Student Activists Hailey Cheng and Ellie Yuen Forced into Silence',
+      titleZh: '學生活動人士鄭海莉及袁艾莉被迫噤聲',
+      contentEn: 'Following Miles Kwan\'s arrest, two prominent student activists were forced to issue public statements ceasing all advocacy. Hailey Cheng (early 20s, HKU student) stated she would have "no association with any foreign forces or individuals alleged to be undermining social stability." Ellie Yuen (early 20s, CityU student) who had conducted multiple BBC interviews demanding truth and accountability, was similarly silenced. Both were threatened after Kwan\'s detention.',
+      contentZh: '在 Miles Kwan 被捕後，兩名著名學生活動人士被迫發表公開聲明停止所有倡議活動。鄭海莉（20歲出頭，港大學生）表示將「不與任何被指破壞社會穩定的外國勢力或個人有任何聯繫」。袁艾莉（20歲出頭，城大學生）曾接受多次BBC訪問要求真相及問責，同樣被迫噤聲。兩人均在 Kwan 被拘留後受到威脅。',
+      source: 'Student Testimonies / BBC'
     },
     {
-      category: 'independent' as Category,
+      category: 'official',
       date: 'Dec 5, 2025',
-      titleEn: 'Censorship Intensifies: Posts Deleted En Masse',
-      titleZh: '審查加劇：大量帖文被刪除',
-      contentEn: 'Social media platforms begin mass deletion of posts related to the fire, citing "fake news" violations. Several popular hashtags related to the tragedy are blocked. Users report accounts suspended for sharing survivor testimonies.',
-      contentZh: '社交媒體平台開始大規模刪除與火災相關的帖文，指違反「假新聞」條款。多個與慘劇相關的熱門主題標籤被封鎖。用戶報告帳戶因分享生還者證詞被暫停。',
-      source: 'Internet Freedom Observatory'
+      titleEn: 'Hong Kong Government Slams "Biased" Wall Street Journal Editorial on Tai Po Fire',
+      titleZh: '香港政府抨擊《華爾街日報》關於大埔火災的「偏頗」社論',
+      contentEn: 'Security Secretary Chris Tang condemned a Wall Street Journal editorial titled "No fire critics allowed in Hong Kong." Tang accused the newspaper of "bias" and "interfering in Hong Kong\'s internal affairs" after the editorial questioned fire safety oversight and called the arrests of petition organizers "authoritarian overreach." He reiterated that authorities\' priority is supporting affected residents and warned that any attempts to "sabotage the recovery work" will be handled seriously.',
+      contentZh: '保安局局長鄧炳強譴責《華爾街日報》題為「香港不容火災批評者」的社論。在該社論質疑消防安全監管並稱拘捕聯署組織者為「威權過度」後，鄧指責該報「偏頗」和「干預香港內部事務」。他重申當局的首要任務是支援受影響居民，並警告任何「破壞恢復工作」的企圖將受到嚴肅處理。',
+      source: 'Hong Kong Free Press',
+      url: 'https://hongkongfp.com/2025/12/05/hong-kong-govt-slams-biased-wall-street-journal-editorial-on-tai-po-fire/'
     },
     {
-      category: 'crackdown' as Category,
-      date: 'Dec 8, 2025',
-      titleEn: 'Victims\' Families Prevented from Media Contact',
-      titleZh: '遇難者家屬被阻止接受媒體採訪',
-      contentEn: 'Reports emerge that families of victims are being visited by police and "advised" not to speak to journalists. Some report being threatened with loss of compensation if they "cause trouble."',
-      contentZh: '有報導指遇難者家屬受到警方探訪，被「勸告」不要接受記者採訪。有家屬報告被威脅如果「搞事」將失去賠償。',
-      source: 'Press Freedom Advocates'
+      category: 'crackdown',
+      date: 'Dec 6, 2025',
+      titleEn: '"Don\'t Say We Didn\'t Warn You": Beijing Summons Journalists in Hong Kong After Fire',
+      titleZh: '「別說我們沒警告你」：火災後北京在香港召見記者',
+      contentEn: 'The Guardian reports that Beijing\'s liaison office in Hong Kong has summoned foreign journalists for "warning talks" following their coverage of the Tai Po fire and subsequent arrests. Reporters were told to "respect Hong Kong\'s judicial process" and warned against "sensationalizing" the tragedy. The phrase "don\'t say we didn\'t warn you" - historically used before Chinese military action - has alarmed press freedom advocates.',
+      contentZh: '《衛報》報導，北京駐港聯絡辦公室在記者報導大埔火災及後續拘捕後，召見外國記者進行「警告談話」。記者被告知要「尊重香港司法程序」，並被警告不要「聳人聽聞」這場悲劇。「別說我們沒警告你」這句話——歷史上在中國軍事行動前使用——令新聞自由倡議者感到震驚。',
+      source: 'The Guardian',
+      url: 'https://www.theguardian.com/news/2025/dec/06/dont-say-we-didnt-warn-you-beijing-summons-journalists-in-hong-kong-after-fire'
+    },
+    {
+      category: 'official',
+      date: 'Dec 2, 2025',
+      titleEn: 'Chief Executive Announces Independent Committee, But Questions Remain',
+      titleZh: '行政長官宣布獨立委員會，但疑問仍存',
+      contentEn: 'Chief Executive John Lee announced the establishment of an "independent committee" to investigate the fire. However, critics note that committee members will be appointed by the government, raising concerns about genuine independence. The announcement came only after widespread public pressure and the petition launched by Miles Kwan gained tens of thousands of signatures.',
+      contentZh: '行政長官李家超宣布成立「獨立委員會」調查火災。然而，批評者指出委員會成員將由政府任命，引發對真正獨立性的擔憂。該宣布是在廣泛公眾壓力及 Miles Kwan 發起的聯署獲得數萬簽名後才作出。',
+      source: 'Hong Kong 01 / Government Press Release'
     }
   ];
 
@@ -147,6 +129,8 @@ export function NewsReports({ language }: NewsReportsProps) {
         return <FileText className="w-5 h-5" />;
       case 'crackdown':
         return <AlertTriangle className="w-5 h-5" />;
+      case 'censorship':
+        return <AlertTriangle className="w-5 h-5" />;
       default:
         return <FileText className="w-5 h-5" />;
     }
@@ -159,6 +143,8 @@ export function NewsReports({ language }: NewsReportsProps) {
       case 'independent':
         return 'border-green-400 hover:border-green-300';
       case 'crackdown':
+        return 'border-yellow-400 hover:border-yellow-300';
+      case 'censorship':
         return 'border-yellow-400 hover:border-yellow-300';
       default:
         return 'border-white/20 hover:border-white/40';
@@ -223,9 +209,22 @@ export function NewsReports({ language }: NewsReportsProps) {
                   <p className="text-white/80 mb-4 leading-relaxed">
                     {language === 'en' ? report.contentEn : report.contentZh}
                   </p>
-                  <p className="text-sm text-white/50">
-                    {language === 'en' ? 'Source' : '來源'}: {report.source}
-                  </p>
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <p className="text-sm text-white/50">
+                      {language === 'en' ? 'Source' : '來源'}: {report.source}
+                    </p>
+                    {report.url && (
+                      <a
+                        href={report.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-yellow-400 hover:text-yellow-300 transition-colors"
+                      >
+                        <span>{language === 'en' ? 'Read Full Article' : '閱讀完整文章'}</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
